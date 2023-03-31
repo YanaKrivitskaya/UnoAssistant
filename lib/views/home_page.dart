@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uno_assistant/helpers/router.dart';
 
 import '../helpers/colors.dart';
 
@@ -42,7 +43,7 @@ class _HomePageState extends State<HomePage>{
       foregroundColor: MaterialStateProperty.all<Color>(ColorsPalette.white)
     ),
     onPressed: () {
-      //Navigator.pushNamed(context, tripStartPlanningRoute).then((value) {} /*context.read<TripsBloc>().add(GetAllTrips())*/);
+      Navigator.pushNamed(context, newGameRoute).then((value) {} /*context.read<TripsBloc>().add(GetAllTrips())*/);
     },
     child: const Text("New Game")
   );
