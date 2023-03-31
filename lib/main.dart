@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sizer/sizer.dart';
 import 'package:uno_assistant/helpers/styles.dart';
 import 'package:uno_assistant/views/home_page.dart';
 
 import 'helpers/colors.dart';
+import 'helpers/router.dart';
 
 void main() {
   runApp(const UnoApp());
@@ -21,21 +23,26 @@ class UnoApp extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]); 
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Uno Assistant',
-      theme: ThemeData(
-        primaryColor: ColorsPalette.desire,
-        scaffoldBackgroundColor: ColorsPalette.white,              
-        textTheme: GoogleFonts.encodeSansTextTheme(Theme.of(context).textTheme), 
-        colorScheme: ColorScheme.fromSwatch().copyWith(
-          secondary: ColorsPalette.maxBlueGreen,
-          outline: ColorsPalette.flirtatious
-        ),              
-      ),
-      home: HomePage(),
-    );
+    return Sizer(
+      builder: (context, orientation, deviceType) {
+        return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Uno Assistant',
+        theme: ThemeData(
+          primaryColor: ColorsPalette.desire,
+          scaffoldBackgroundColor: ColorsPalette.white,              
+          textTheme: GoogleFonts.encodeSansTextTheme(Theme.of(context).textTheme), 
+          colorScheme: ColorScheme.fromSwatch().copyWith(
+            secondary: ColorsPalette.maxBlueGreen,
+            outline: ColorsPalette.flirtatious
+          ),              
+        ),
+        home: HomePage(),
+        onGenerateRoute: RouteGenerator.generateRoute,
+      );
+    } );   
   }
+  
 }
 
 Widget _header() => Row(

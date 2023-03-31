@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class ColorsPalette {
   static const Color white = Colors.white;
-  
+  static const Color black = Colors.black;
+
   static const Color desire = Color(0xFFEB3B5A);
   static const Color highBlue = Color(0xFF45AAF2);
   static const Color boyzone = Color(0xFF2D98DA);
