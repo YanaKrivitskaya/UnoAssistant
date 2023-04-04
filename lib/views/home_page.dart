@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage>{
       foregroundColor: MaterialStateProperty.all<Color>(ColorsPalette.white)
     ),
     onPressed: () {
-      //Navigator.pushNamed(context, tripStartPlanningRoute).then((value) {} /*context.read<TripsBloc>().add(GetAllTrips())*/);
+      Navigator.pushNamed(context, currentGameRoute).then((value) {} /*context.read<TripsBloc>().add(GetAllTrips())*/);
     },
     child: const Text("Continue")
   );
