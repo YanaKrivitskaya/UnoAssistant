@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:uno_assistant/helpers/styles.dart';
 
 import '../helpers/colors.dart';
+import '../helpers/router.dart';
 
 class GamePlayersPage extends StatefulWidget{
   const GamePlayersPage({super.key});
@@ -122,7 +123,7 @@ class _GamePlayersPageState extends State<GamePlayersPage>{
       if(scoreToWin < 0){
         
       }
-      //Navigator.pushNamed(context, tripStartPlanningRoute).then((value) {} /*context.read<TripsBloc>().add(GetAllTrips())*/);
+      Navigator.pushNamed(context, currentGameRoute).then((value) {} /*context.read<TripsBloc>().add(GetAllTrips())*/);
     },
     child: const Text("Start!")
   );

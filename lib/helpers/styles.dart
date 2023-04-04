@@ -11,6 +11,16 @@ final double formWidth40 = 40.w;
 final double formWidth60 = 60.w;
 final double formWidth70 = 70.w;
 final double viewWidth80 = 80.w;
+final double viewWidth90 = 90.w;
+
+// ANCHOR Height 
+final double chartBarHeight = 3.h; 
+final double tripItemHeight = 10.h; 
+final double minCardHeight = 7.h;
+final double maxCardHeight = 25.h;
+final double scrollViewHeight = 60.h;
+final double scrollViewHeightSm = 30.h;
+final double scrollViewHeightMd = 35.h;
 
 //ANCHOR Font Size
 final double headerFontSize = 25.sp; // View headers
