@@ -2,24 +2,24 @@ import 'dart:convert';
 
 
 class Game {
-  int id;
-  int scoreToWin;
-  DateTime startDate;
+  int? id;
+  int? scoreToWin;
+  DateTime? startDate;
   DateTime? endDate;
   int? winnerId;
   int? winnerScore;
-  DateTime createdDate;
-  DateTime updatedDate;
+  DateTime? createdDate;
+  DateTime? updatedDate;
 
   Game({
-    required this.id,
-    required this.scoreToWin,
-    required this.startDate,
+    this.id,
+    this.scoreToWin,
+    this.startDate,
     this.endDate,
     this.winnerId,
     this.winnerScore,
-    required this.createdDate,
-    required this.updatedDate,
+    this.createdDate,
+    this.updatedDate,
   });
 
   Game copyWith({
@@ -47,26 +47,26 @@ class Game {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'scoreToWin': scoreToWin,
-      'startDate': startDate.toIso8601String(),
-      'endDate': endDate?.toIso8601String(),
-      'winnerId': winnerId,
-      'winnerScore': winnerScore,
-      'createdDate': createdDate.toIso8601String(),
-      'updatedDate': updatedDate.toIso8601String(),
+      'score_to_win': scoreToWin,
+      'start_date': DateTime.now().toIso8601String(),
+      'end_date': endDate?.toIso8601String(),
+      'winner_id': winnerId,
+      'winner_score': winnerScore,
+      'created_date': createdDate != null ? createdDate!.toIso8601String() : DateTime.now().toIso8601String(),
+      'updated_date': DateTime.now().toIso8601String(),
     };
   }
 
   factory Game.fromMap(Map<String, dynamic> map) {
     return Game(
       id: map['id']?.toInt() ?? 0,
-      scoreToWin: map['scoreToWin']?.toInt() ?? 0,
-      startDate: DateTime.parse(map['startDate']),
-      endDate: map['endDate'] != null ? DateTime.parse(map['endDate']) : null,
-      winnerId: map['winnerId']?.toInt(),
-      winnerScore: map['winnerScore']?.toInt(),
-      createdDate: DateTime.parse(map['createdDate']),
-      updatedDate: DateTime.parse(map['updatedDate']),
+      scoreToWin: map['score_to_win']?.toInt() ?? 0,
+      startDate: DateTime.parse(map['start_date']),
+      endDate: map['end_date'] != null ? DateTime.parse(map['end_date']) : null,
+      winnerId: map['winner_id']?.toInt(),
+      winnerScore: map['winner_score']?.toInt(),
+      createdDate: DateTime.parse(map['created_date']),
+      updatedDate: DateTime.parse(map['updated_date']),
     );
   }
 

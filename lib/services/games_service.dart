@@ -19,6 +19,11 @@ class GamesService{
   readAllGames() async{
     return await _unoRepository.readData('games');
   }
+
+  getCurrentGame() async{
+    return await _unoRepository.getCurrentGame();
+  }
+
   //Edit Game
   updateGame(Game game) async{
     return await _unoRepository.updateData('games', game.toMap());

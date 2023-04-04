@@ -1,5 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 
+import '../models/game.dart';
 import 'db_helper.dart';
 
 class UnoRepository{
@@ -20,9 +21,10 @@ class UnoRepository{
     }
   }
 
-  insertData(table, data) async {
+  Future<int?> insertData(table, data) async {
     var connection = await database;
-    return await connection?.insert(table, data);
+    var res = await connection?.insert(table, data);
+    return res;
   }
 
   readData(table) async {
@@ -34,13 +36,20 @@ class UnoRepository{
     var connection = await database;
     return await connection?.query(table, where: 'id=?', whereArgs: [itemId]);
   }
+  
   updateData(table, data) async {
     var connection = await database;
-    return await connection
-    ?.update(table, data, where: 'id=?', whereArgs: [data['id']]);
+    return await connection?.update(table, data, where: 'id=?', whereArgs: [data['id']]);
   }
+
   deleteDataById(table, itemId) async {
     var connection = await database;
     return await connection?.rawDelete("delete from $table where id=$itemId");
+  }
+
+  getCurrentGame() async {
+    var connection = await database;
+    var res = await connection?.query('games', where: 'end_date is null', limit: 1);
+    return res!.isNotEmpty ? Game.fromMap(res.first) : null ;
   }
 }
