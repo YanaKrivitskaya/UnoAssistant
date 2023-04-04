@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
 import 'package:uno_assistant/helpers/styles.dart';
-import 'package:uno_assistant/views/home_page.dart';
+import 'package:uno_assistant/services/bloc_observer.dart';
+import 'package:uno_assistant/views/home/home_page.dart';
 
 import 'helpers/colors.dart';
 import 'helpers/router.dart';
 
 void main() {
+  Bloc.observer = const UnoBlocObserver();
   runApp(const UnoApp());
 }
 
@@ -37,7 +40,7 @@ class UnoApp extends StatelessWidget {
             outline: ColorsPalette.flirtatious
           ),              
         ),
-        home: HomePage(),
+        home: const HomePage(),
         onGenerateRoute: RouteGenerator.generateRoute,
       );
     } );   
