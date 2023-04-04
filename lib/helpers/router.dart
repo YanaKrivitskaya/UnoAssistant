@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uno_assistant/views/game_players_page.dart';
+import 'package:uno_assistant/views/points_page.dart';
 
 import '../views/game_page.dart';
 import '../views/home_page.dart';
@@ -7,6 +8,7 @@ import '../views/home_page.dart';
 const String homeRoute = '/home';
 const String newGameRoute = '/newGame';
 const String currentGameRoute = '/game';
+const String roundPointsRoute = '/roundPoints';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -19,6 +21,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => GamePlayersPage());
       case currentGameRoute:
         return MaterialPageRoute(builder: (_) => GamePage());
+      case roundPointsRoute:
+        return MaterialPageRoute(builder: (_) => PointsPage());
       default:
         return _errorRoute();
   }  
