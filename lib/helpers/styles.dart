@@ -15,7 +15,7 @@ final double viewWidth90 = 90.w;
 
 // ANCHOR Height 
 final double chartBarHeight = 3.h; 
-final double tripItemHeight = 10.h; 
+final double cardHeight = 10.h; 
 final double minCardHeight = 7.h;
 final double maxCardHeight = 25.h;
 final double scrollViewHeight = 60.h;

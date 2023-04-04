@@ -65,6 +65,22 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/UNO_Logo.png
+    - assets/card_0.png
+    - assets/card_1.png
+    - assets/card_2.png
+    - assets/card_3.png
+    - assets/card_4.png
+    - assets/card_5.png
+    - assets/card_6.png
+    - assets/card_7.png
+    - assets/card_8.png
+    - assets/card_9.png
+    - assets/card_custom.png
+    - assets/card_reverse.png
+    - assets/card_skip.png
+    - assets/card_take_four.png
+    - assets/card_take_two.png
+    - assets/card_wild.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

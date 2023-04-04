@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uno_assistant/helpers/router.dart';
 import 'package:uno_assistant/helpers/styles.dart';
 import 'package:d_chart/d_chart.dart';
 
@@ -129,7 +130,7 @@ class _GamePageState extends State<GamePage>{
       ),
       floatingActionButton:  FloatingActionButton.extended(
         onPressed: (){          
-          
+          Navigator.pushNamed(context, roundPointsRoute).then((value) {});
         },
         tooltip: 'End Round',
         backgroundColor: ColorsPalette.flirtatious,
