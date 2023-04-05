@@ -32,6 +32,11 @@ class UnoRepository{
 			return await connection?.query(table);
 	}
 
+  readDataRaw(query) async {
+			var connection = await database;
+			return await connection?.rawQuery(query);
+	}
+
   readDataById(table, itemId) async {
     var connection = await database;
     return await connection?.query(table, where: 'id=?', whereArgs: [itemId]);
