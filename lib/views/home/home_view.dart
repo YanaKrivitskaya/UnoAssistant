@@ -37,7 +37,7 @@ class _HomeViewState extends State<HomeView>{
                 const SizedBox(height: 50.0,),
                 if(state.currentGame != null) 
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    _continueGameButton(context),
+                    _continueGameButton(context, state.currentGame!.id!),
                 ]),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     _newGameButton(context),
@@ -61,14 +61,14 @@ class _HomeViewState extends State<HomeView>{
     child: const Text("New Game")
   );
 
-  Widget _continueGameButton(BuildContext context) => TextButton(
+  Widget _continueGameButton(BuildContext context, int gameId) => TextButton(
     style: ButtonStyle(
       fixedSize: MaterialStateProperty.all<Size>(const Size.fromWidth(120.0)),      
       backgroundColor: MaterialStateProperty.all<Color>(ColorsPalette.flirtatious),
       foregroundColor: MaterialStateProperty.all<Color>(ColorsPalette.white)
     ),
     onPressed: () {
-      Navigator.pushNamed(context, currentGameRoute).then((value) {} /*context.read<TripsBloc>().add(GetAllTrips())*/);
+      Navigator.pushNamed(context, currentGameRoute, arguments: gameId).then((value) {} /*context.read<TripsBloc>().add(GetAllTrips())*/);
     },
     child: const Text("Continue")
   );

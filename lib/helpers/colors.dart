@@ -21,3 +21,12 @@ class ColorsPalette {
   static const Color blueGrey = Color(0xFFACC1DA);
   static const Color blueHorizon = Color(0xFF4B6584);
 }
+
+List<Color> gameColors = [
+  ColorsPalette.gloomyPurple, 
+  ColorsPalette.highBlue,
+  ColorsPalette.algalFuel,
+  ColorsPalette.flirtatious,
+  ColorsPalette.turquoiseTopaz,
+  ColorsPalette.desire
+];
