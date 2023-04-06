@@ -1,12 +1,13 @@
 part of 'game_cubit.dart';
 
-enum GameStatus { initial, loading, success, failure }
+enum GameStatus { initial, loading, success, failure, finished }
 
 extension GameStatusX on GameStatus {
   bool get isInitial => this == GameStatus.initial;
   bool get isLoading => this == GameStatus.loading;
   bool get isSuccess => this == GameStatus.success;
   bool get isFailure => this == GameStatus.failure;
+  bool get isFinished => this == GameStatus.finished;
 }
 
 class GameState extends Equatable {

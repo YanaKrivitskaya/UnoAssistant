@@ -44,5 +44,9 @@ class GameService{
   Future<void> submitRound(GameRound round) async{    
     await _unoRepository.insertData('rounds', round.toMap());    
   }
+
+  Future<void> updateGame(Game game) async{    
+    await _unoRepository.updateData('games', game.toMap());    
+  }
   
 }
