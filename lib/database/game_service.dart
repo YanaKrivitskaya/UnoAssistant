@@ -1,4 +1,5 @@
 
+import 'package:sqflite/sqflite.dart';
 import 'package:uno_assistant/database/uno_repository.dart';
 import 'package:uno_assistant/models/game.dart';
 import 'package:uno_assistant/models/game_round.dart';
@@ -33,5 +34,15 @@ class GameService{
     }
     return [];
   } 
+
+  Future<int> getRoundNumbers(int gameId) async{
+    var query = "select COALESCE(max(gr.round_number), 0) from rounds gr join games g on g.id = gr.game_id where g.id = $gameId";
+    var res = await _unoRepository.readDataRaw(query);
+    return res!.isNotEmpty ?  Sqflite.firstIntValue(res) ?? 0 : 0;
+  } 
+
+  Future<void> submitRound(GameRound round) async{    
+    await _unoRepository.insertData('rounds', round.toMap());    
+  }
   
 }

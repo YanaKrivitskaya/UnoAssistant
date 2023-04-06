@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uno_assistant/views/game_players/game_players_page.dart';
-import 'package:uno_assistant/views/points_page.dart';
+import 'package:uno_assistant/views/game_round/game_round_page.dart';
 
 import '../views/game/game_page.dart';
 import '../views/home/home_page.dart';
@@ -18,7 +18,7 @@ class RouteGenerator {
       case homeRoute:
         return MaterialPageRoute(builder: (_) => const HomePage());
       case newGameRoute:
-        return MaterialPageRoute(builder: (_) => GamePlayersPage());
+        return MaterialPageRoute(builder: (_) => const GamePlayersPage());
       case currentGameRoute:
         { 
           if (args is int) {
@@ -27,7 +27,10 @@ class RouteGenerator {
           return _errorRoute();
         }        
       case roundPointsRoute:
-        return MaterialPageRoute(builder: (_) => PointsPage());
+        if (args is int) {
+          return MaterialPageRoute(builder: (_) => GameRoundPage(gameId: args));
+        } 
+        return _errorRoute();        
       default:
         return _errorRoute();
   }  
