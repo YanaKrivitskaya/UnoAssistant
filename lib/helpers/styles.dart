@@ -36,7 +36,7 @@ final double sizerHeightsm = 1.h;
 final double sizerWidthsm = 1.w;
 final double sizerWidthMd = 2.w;
 final double sizerHeight = 1.5.h;
-final double sizerHeightlg = 2.h;
+final double sizerHeightlg = 5.h;
 
 TextStyle encodeStyle({Color? color, double? fontSize, FontWeight? weight, TextDecoration? decoration}) =>
   GoogleFonts.encodeSans(textStyle: TextStyle(

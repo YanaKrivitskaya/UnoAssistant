@@ -70,6 +70,7 @@ class _GameViewState extends State<GameView>{
                         itemCount: players.length,
                         itemBuilder: (context, position){
                           final player = players[position];
+                          var score = rounds.where((r) => r.playerId == player.id).fold<int>(0, (sum, element) => sum + element.score!.toInt());
                           return Column(children: [
                             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
                               Text(player.name, style: encodeStyle(fontSize: accentFontSize)),
@@ -78,11 +79,11 @@ class _GameViewState extends State<GameView>{
                                 width: formWidth70,
                                 child: DChartSingleBar(
                                     forgroundColor: gameColors[position],
-                                    forgroundLabel: Text("120", style: encodeStyle(color: ColorsPalette.white, weight: FontWeight.bold)),
+                                    forgroundLabel: Text(score.toString(), style: encodeStyle(color: ColorsPalette.white, weight: FontWeight.bold)),
                                     forgroundLabelPadding: const EdgeInsets.only(right: 10.0),
                                     backgroundLabel: Text(game.scoreToWin!.toString(), style: encodeStyle(color: ColorsPalette.black, weight: FontWeight.bold)),
                                     backgroundLabelPadding: const EdgeInsets.only(right: 10.0),
-                                    value: rounds.where((r) => r.playerId == player.id).fold(0, (sum, element) => sum + element.score!.toDouble()),
+                                    value: score.toDouble(),
                                     max: game.scoreToWin!.toDouble(),
                                   ),
                             )
@@ -103,7 +104,7 @@ class _GameViewState extends State<GameView>{
                   ],),
                 const Divider(color: ColorsPalette.blueGrey),
                 SizedBox(
-                  height: scrollViewHeightXS,
+                  height: scrollViewHeightMd,
                   child: SingleChildScrollView(
                     child: Column(children: [
                       if (rounds.isNotEmpty) ListView.builder(
@@ -113,7 +114,7 @@ class _GameViewState extends State<GameView>{
                         itemBuilder: (context, position){
                           final round = rounds[position];
                           return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
-                            Text(position.toString(), style: encodeStyle(fontSize: accentFontSize)),
+                            Text(round.roundNumber.toString(), style: encodeStyle(fontSize: accentFontSize)),
                             Text(players.firstWhere((p) => p.id == round.playerId).name, style: encodeStyle(fontSize: accentFontSize)),
                             Text(round.score.toString(), style: encodeStyle(fontSize: accentFontSize)),
                           ],) ;
@@ -130,7 +131,9 @@ class _GameViewState extends State<GameView>{
       ) ,
       floatingActionButton:  FloatingActionButton.extended(
         onPressed: (){          
-          Navigator.pushNamed(context, roundPointsRoute).then((value) {});
+          Navigator.pushNamed(context, roundPointsRoute, arguments: game.id).then((value) {
+            context.read<GameCubit>().getCurrentGame(game.id!);
+          });
         },
         tooltip: 'End Round',
         backgroundColor: ColorsPalette.flirtatious,

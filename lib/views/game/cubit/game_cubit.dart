@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uno_assistant/models/game.dart';
 import 'package:uno_assistant/models/game_round.dart';
 import 'package:uno_assistant/models/player.dart';
-import 'package:uno_assistant/views/game/service/game_service.dart';
+import 'package:uno_assistant/database/game_service.dart';
 
 part 'game_state.dart';
 
