@@ -30,6 +30,26 @@ class GameCubit extends Cubit<GameState> {
     }on Exception catch (ex) {
       print(ex.toString());
       emit(state.copyWith(status: GameStatus.failure));
+    }    
+  }
+
+  Future<void> finishGame(int winnerId, int points) async{
+    emit(state.copyWith(status: GameStatus.loading));
+
+    try{
+      var game = await _gameService.getGameById(state.currentGame!.id!);
+      if(game != null) {
+        var finishedGame = game.copyWith(endDate: DateTime.now(), winnerId: winnerId, winnerScore: points);
+        await _gameService.updateGame(finishedGame);
+        
+        emit(state.copyWith(status: GameStatus.finished, game: finishedGame));
+      } else {
+        emit(state.copyWith(status: GameStatus.failure));
+      }
+      
+    }on Exception catch (ex) {
+      print(ex.toString());
+      emit(state.copyWith(status: GameStatus.failure));
     }
     
   }

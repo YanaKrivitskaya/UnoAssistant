@@ -1,14 +1,13 @@
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:uno_assistant/helpers/styles.dart';
 import 'package:uno_assistant/helpers/widgets.dart';
-import 'package:uno_assistant/models/card.dart';
 import 'package:uno_assistant/models/player.dart';
 import 'package:uno_assistant/views/game_round/cubit/game_round_cubit.dart';
-import 'package:badges/badges.dart' as badges;
 
 import '../../helpers/colors.dart';
-import '../../helpers/router.dart';
 
 class GameRoundView extends StatefulWidget{
   const GameRoundView({super.key});

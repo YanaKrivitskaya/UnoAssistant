@@ -38,6 +38,7 @@ dependencies:
   d_chart: ^2.2.11
   flutter_bloc: ^8.0.0
   badges: ^3.0.3
+  confetti: ^0.7.0
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -84,6 +85,7 @@ flutter:
     - assets/card_take_four.png
     - assets/card_take_two.png
     - assets/card_wild.png
+    - assets/trophy.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -124,25 +124,7 @@ class _GamePlayersViewState extends State<GamePlayersView>{
                       )
                     ],)
                   )
-                ),
-                /*Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  Column(children: [
-                    Text("Yana", style: encodeStyle(fontSize: accentFontSize)),
-                  ],),
-                  Column(children: [
-                    _switchPlayer(context)
-                  ],)
-                ]),
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  Column(children: [
-                    Text("SP", style: encodeStyle(fontSize: accentFontSize)),
-                  ],),
-                  Column(children: [
-                    _switchPlayer(context)
-                  ],)
-                ]),*/
-                //const SizedBox(height: 25.0),
-                //const Divider(color: ColorsPalette.blueGrey)
+                ),                
               ]),
             );
           }
