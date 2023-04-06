@@ -38,7 +38,7 @@ class _GameViewState extends State<GameView>{
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: ColorsPalette.black),
           onPressed: (){
-            Navigator.pop(context);
+            Navigator.of(context).pushNamedAndRemoveUntil(Navigator.defaultRouteName, (Route<dynamic> route) => false);
           },
         ),
       ),

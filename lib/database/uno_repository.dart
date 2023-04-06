@@ -54,7 +54,7 @@ class UnoRepository{
 
   getCurrentGame() async {
     var connection = await database;
-    var res = await connection?.query('games', where: 'end_date is null', limit: 1);
+    var res = await connection?.query('games', where: 'end_date is null', orderBy: 'id desc', limit: 1);
     return res!.isNotEmpty ? Game.fromMap(res.first) : null ;
   }
 }

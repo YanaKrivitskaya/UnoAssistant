@@ -161,8 +161,8 @@ class _GamePlayersViewState extends State<GamePlayersView>{
         
       }else{
         var game = Game(scoreToWin: scoreToWin);
-        context.read<GamePlayersCubit>().addNewGame(game, players).then((value){
-          Navigator.pushNamed(context, currentGameRoute).then((value) {} /*context.read<TripsBloc>().add(GetAllTrips())*/);
+        context.read<GamePlayersCubit>().addNewGame(game, players).then((gameId){
+          Navigator.pushNamed(context, currentGameRoute, arguments: gameId).then((value) {});
         });        
       }      
     },
