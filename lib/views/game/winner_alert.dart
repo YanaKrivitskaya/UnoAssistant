@@ -1,14 +1,15 @@
 
 
+import 'dart:math';
+
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'dart:math';
 
 import 'package:uno_assistant/helpers/colors.dart';
 import 'package:uno_assistant/helpers/styles.dart';
 import 'package:uno_assistant/models/player.dart';
 import 'package:uno_assistant/views/game/cubit/game_cubit.dart';
-import 'package:confetti/confetti.dart';
 
 class WinnerAlert extends StatefulWidget {
   Player winner;
@@ -18,7 +19,7 @@ class WinnerAlert extends StatefulWidget {
   );
 
   @override
-  _WinnerAlertState createState() => new _WinnerAlertState();
+  _WinnerAlertState createState() => _WinnerAlertState();
 }
 
 class _WinnerAlertState extends State<WinnerAlert>{ 
@@ -93,11 +94,12 @@ class _WinnerAlertState extends State<WinnerAlert>{
                   shouldLoop:
                       true, // start again as soon as the animation is finished
                   colors: const [
-                    Colors.green,
-                    Colors.blue,
-                    Colors.pink,
-                    Colors.orange,
-                    Colors.purple
+                    ColorsPalette.algalFuel,
+                    ColorsPalette.highBlue,
+                    ColorsPalette.desire,
+                    ColorsPalette.beniukonBronze,
+                    ColorsPalette.gloomyPurple,
+                    ColorsPalette.flirtatious,
                   ], // manually specify the colors to be used
                   createParticlePath: drawStar, // define a custom shape/path.
                 ),

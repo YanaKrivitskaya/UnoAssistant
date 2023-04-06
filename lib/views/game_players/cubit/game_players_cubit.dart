@@ -50,7 +50,7 @@ class GamePlayersCubit extends Cubit<GamePlayersState> {
     emit(state.copyWith(status: GamePlayersStatus.success, gamePlayers: state.players));
   } 
 
-  Future<void> addNewGame(Game game, List<Player> players) async{
+  Future<int?> addNewGame(Game game, List<Player> players) async{
     emit(state.copyWith(status: GamePlayersStatus.loading));
 
     try{
@@ -62,6 +62,7 @@ class GamePlayersCubit extends Cubit<GamePlayersState> {
           var gamePlayer = GamePlayer(gameId: gameId, playerId: player.id);
           await _unoRepository.insertData('game_players', gamePlayer.toMap());
         }
+        return gameId;
       }
     }on Exception catch(ex) {
       print(ex.toString());
