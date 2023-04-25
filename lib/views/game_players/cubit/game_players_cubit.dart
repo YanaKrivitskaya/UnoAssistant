@@ -24,9 +24,8 @@ class GamePlayersCubit extends Cubit<GamePlayersState> {
       res.map<Player>((map) => Player.fromMap(map)).toList() : [];      
 
       emit(state.copyWith(status: GamePlayersStatus.success, gamePlayers: players));
-    }on Exception catch(ex){
-      print(ex.toString());
-      emit(state.copyWith(status: GamePlayersStatus.failure));
+    }on Exception catch(ex){      
+      emit(state.copyWith(status: GamePlayersStatus.failure, errorMessage: ex.toString()));
     }    
   }
 
@@ -38,8 +37,7 @@ class GamePlayersCubit extends Cubit<GamePlayersState> {
       
       if(res != null && res > 0 ) getAllPlayers();
     }on Exception catch(ex) {
-      print(ex.toString());
-      emit(state.copyWith(status: GamePlayersStatus.failure));
+      emit(state.copyWith(status: GamePlayersStatus.failure, errorMessage: ex.toString()));
     }    
   }
 
@@ -52,21 +50,34 @@ class GamePlayersCubit extends Cubit<GamePlayersState> {
 
   Future<int?> addNewGame(Game game, List<Player> players) async{
     emit(state.copyWith(status: GamePlayersStatus.loading));
+    
+    var selectedPlayers = players.where((p) => p.isSelected!);
 
-    try{
-      var gameId = await _unoRepository.insertData('games', game.toMap());
-      
-      if(gameId != null && gameId > 0 ) {
-        var selectedPlayers = players.where((p) => p.isSelected!);
-        for (var player in selectedPlayers) {
-          var gamePlayer = GamePlayer(gameId: gameId, playerId: player.id);
-          await _unoRepository.insertData('game_players', gamePlayer.toMap());
+    if(selectedPlayers.length > 1){
+      if((game.scoreToWin ?? 0) > 0){
+        try{
+          var gameId = await _unoRepository.insertData('games', game.toMap());
+          
+          if(gameId != null && gameId > 0 ) {
+            
+            for (var player in selectedPlayers) {
+              var gamePlayer = GamePlayer(gameId: gameId, playerId: player.id);
+              await _unoRepository.insertData('game_players', gamePlayer.toMap());
+            }
+            return gameId;
+          }
+          emit(state.copyWith(status: GamePlayersStatus.failure, errorMessage: "Game not created"));
+        }on Exception catch(ex) {
+          emit(state.copyWith(status: GamePlayersStatus.failure, errorMessage: ex.toString()));
         }
-        return gameId;
       }
-    }on Exception catch(ex) {
-      print(ex.toString());
-      emit(state.copyWith(status: GamePlayersStatus.failure));
-    }    
+      else{
+      emit(state.copyWith(status: GamePlayersStatus.failure, errorMessage: "Specify win score"));
+    } 
+    }else{
+      emit(state.copyWith(status: GamePlayersStatus.failure, errorMessage: "Select at least two players"));
+    }   
+    
+    return null;
   }
 }

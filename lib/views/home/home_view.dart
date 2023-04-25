@@ -70,7 +70,9 @@ class _HomeViewState extends State<HomeView>{
       foregroundColor: MaterialStateProperty.all<Color>(ColorsPalette.white)
     ),
     onPressed: () {
-      Navigator.pushNamed(context, currentGameRoute, arguments: gameId).then((value) {} /*context.read<TripsBloc>().add(GetAllTrips())*/);
+      Navigator.pushNamed(context, currentGameRoute, arguments: gameId).then((value) {
+        context.read<HomeCubit>().getCurrentGame();
+      });
     },
     child: const Text("Continue")
   );

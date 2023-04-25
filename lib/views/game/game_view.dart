@@ -29,145 +29,148 @@ class _GameViewState extends State<GameView>{
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,    
-        centerTitle: true,
-        title: Text('Game', style:encodeStyle(fontSize: smallHeaderFontSize)),
-        backgroundColor: ColorsPalette.white,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: ColorsPalette.black),
-          onPressed: (){
-            Navigator.of(context).pushNamedAndRemoveUntil(Navigator.defaultRouteName, (Route<dynamic> route) => false);
-          },
-        ),
-      ),
-      body: BlocListener<GameCubit, GameState>(
-        listener: (context, state) {
-          if(state.status == GameStatus.success){
-            if(state.players != null){
-              state.players!.forEach((player) {
-                var totalPoints = state.rounds!.where((r) => r.playerId == player.id)
-                  .fold<int>(0, (sum, element) => sum + element.score!
-                  .toInt());
+    return BlocListener<GameCubit, GameState>(
+    listener: (context, state) {
+      if(state.status == GameStatus.success){
+        if(state.players != null){
+          for (var player in state.players!) {
+            var totalPoints = state.rounds!.where((r) => r.playerId == player.id)
+              .fold<int>(0, (sum, element) => sum + element.score!
+              .toInt());
 
-                  if(totalPoints >= state.currentGame!.scoreToWin!){
-                    context.read<GameCubit>().finishGame(player.id!, totalPoints);
-                  }
-              });
-            } 
+              if(totalPoints >= state.currentGame!.scoreToWin!){
+                context.read<GameCubit>().finishGame(player.id!, totalPoints);
+              }
           }
-          if(state.status == GameStatus.finished){
-            if(state.currentGame != null){
-              showDialog(barrierDismissible: false, context: context,builder: (_) =>
-                BlocProvider.value(
-                  value: context.read<GameCubit>(),
-                  child: WinnerAlert(state.players!.firstWhere((p) => p.id == state.currentGame!.winnerId)),
-                )
-              );
-            } 
-          }
-          },
-          child: BlocBuilder<GameCubit, GameState>(
-            builder: (context, state){
-              if(state.status == GameStatus.initial || state.status == GameStatus.loading){
-                return loadingWidget(ColorsPalette.maxBlueGreen);
-              }else if(state.currentGame != null){
+        } 
+      }
+      if(state.status == GameStatus.finished){
+        if(state.currentGame != null){
+          showDialog(barrierDismissible: false, context: context,builder: (_) =>
+            BlocProvider.value(
+              value: context.read<GameCubit>(),
+              child: WinnerAlert(state.players!.firstWhere((p) => p.id == state.currentGame!.winnerId)),
+            )
+          );
+        } 
+      }
+      },
+      child: BlocBuilder<GameCubit, GameState>(
+        builder: (context, state){
+          if(state.status == GameStatus.initial || state.status == GameStatus.loading){
+            return loadingWidget(ColorsPalette.maxBlueGreen);
+          }else if(state.currentGame != null){
 
-                game = state.currentGame!;
-                players = state.players!;
-                rounds = state.rounds!;
+            game = state.currentGame!;
+            players = state.players!;
+            rounds = state.rounds!;
 
-                return Container(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Column(children: [
-                    Row(mainAxisAlignment: MainAxisAlignment.center,children: [
-                      Text("Score to win: ${game.scoreToWin!}", style: encodeStyle(fontSize: accentFontSize)),
+            return Scaffold(
+              appBar: AppBar(
+                elevation: 0,    
+                centerTitle: true,
+                title: Text('Game', style:encodeStyle(fontSize: smallHeaderFontSize)),
+                backgroundColor: ColorsPalette.white,
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back, color: ColorsPalette.black),
+                  onPressed: (){
+                    Navigator.of(context).pushNamedAndRemoveUntil(Navigator.defaultRouteName, (Route<dynamic> route) => false);
+                  },
+                ),
+              ),
+              body: Container(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(children: [
+                  Row(mainAxisAlignment: MainAxisAlignment.center,children: [
+                    Text("Score to win: ${game.scoreToWin!}", style: encodeStyle(fontSize: accentFontSize)),
+                  ],),
+                  const Divider(color: ColorsPalette.blueGrey),         
+                  SizedBox(height: sizerHeight),
+                  _playersChart(),
+                  const Divider(color: ColorsPalette.blueGrey),    
+                  SizedBox(height: sizerHeight),
+                  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
+                      Text("Round", style: encodeStyle(fontSize: accentFontSize, weight: FontWeight.bold)),
+                      Text("Winner", style: encodeStyle(fontSize: accentFontSize, weight: FontWeight.bold)),
+                      Text("Points", style: encodeStyle(fontSize: accentFontSize, weight: FontWeight.bold)),
                     ],),
-                    const Divider(color: ColorsPalette.blueGrey),         
-                    SizedBox(height: sizerHeight),
-
-                    SizedBox(
-                      height: scrollViewHeightXS,
-                      child: SingleChildScrollView(
-                        child: Column(children: [
-                          if (players.isNotEmpty) ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: players.length,
-                            itemBuilder: (context, position){
-                              final player = players[position];
-                              var score = rounds.where((r) => r.playerId == player.id).fold<int>(0, (sum, element) => sum + element.score!.toInt());
-                              return Column(children: [
-                                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
-                                  Text(player.name, style: encodeStyle(fontSize: accentFontSize)),
-                                  SizedBox(
-                                    height: chartBarHeight,
-                                    width: formWidth70,
-                                    child: DChartSingleBar(
-                                        forgroundColor: gameColors[position],
-                                        forgroundLabel: Text(score.toString(), style: encodeStyle(color: ColorsPalette.white, weight: FontWeight.bold)),
-                                        forgroundLabelPadding: const EdgeInsets.only(right: 10.0),
-                                        backgroundLabel: Text(game.scoreToWin!.toString(), style: encodeStyle(color: ColorsPalette.black, weight: FontWeight.bold)),
-                                        backgroundLabelPadding: const EdgeInsets.only(right: 10.0),
-                                        value: score.toDouble(),
-                                        max: game.scoreToWin!.toDouble(),
-                                      ),
-                                )
-                                ]),
-                                SizedBox(height: sizerHeight),
-                              ],) ;
-                            }
-                          )
-                        ],)
-                      )
-                    ),
-                    const Divider(color: ColorsPalette.blueGrey),    
-                    SizedBox(height: sizerHeight),
-                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
-                        Text("Round", style: encodeStyle(fontSize: accentFontSize, weight: FontWeight.bold)),
-                        Text("Winner", style: encodeStyle(fontSize: accentFontSize, weight: FontWeight.bold)),
-                        Text("Points", style: encodeStyle(fontSize: accentFontSize, weight: FontWeight.bold)),
-                      ],),
-                    const Divider(color: ColorsPalette.blueGrey),
-                    SizedBox(
-                      height: scrollViewHeightMd,
-                      child: SingleChildScrollView(
-                        child: Column(children: [
-                          if (rounds.isNotEmpty) ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: rounds.length,
-                            itemBuilder: (context, position){
-                              final round = rounds[position];
-                              return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
-                                Text(round.roundNumber.toString(), style: encodeStyle(fontSize: accentFontSize)),
-                                Text(players.firstWhere((p) => p.id == round.playerId).name, style: encodeStyle(fontSize: accentFontSize)),
-                                Text(round.score.toString(), style: encodeStyle(fontSize: accentFontSize)),
-                              ],) ;
-                            }
-                          )
-                        ],)
-                      )
-                    )
-                  ]),
-                );
-              } 
-              return loadingWidget(ColorsPalette.maxBlueGreen);
-            }
-          )        
-        )  ,
-      floatingActionButton:  FloatingActionButton.extended(
-        onPressed: (){          
-          Navigator.pushNamed(context, roundPointsRoute, arguments: game.id).then((value) {
-            context.read<GameCubit>().getCurrentGame(game.id!);
-          });
-        },
-        tooltip: 'End Round',
-        backgroundColor: ColorsPalette.flirtatious,
-        label: Text("End Round", style: encodeStyle(color: ColorsPalette.white),)        
-      ),
-    );
+                  const Divider(color: ColorsPalette.blueGrey),
+                    _roundsTable()
+                ]),
+              ),
+              floatingActionButton: game.winnerId == null ? FloatingActionButton.extended(
+                onPressed: (){          
+                  Navigator.pushNamed(context, roundPointsRoute, arguments: game.id).then((value) {
+                    context.read<GameCubit>().getCurrentGame(game.id!);
+                  });
+                },
+                tooltip: 'End Round',
+                backgroundColor: ColorsPalette.flirtatious,
+                label: Text("End Round", style: encodeStyle(color: ColorsPalette.white),)        
+              ) : Container()
+            );            
+          } 
+          return loadingWidget(ColorsPalette.maxBlueGreen);
+        }
+      )
+    );    
   }
+
+  Widget _playersChart() => SizedBox(
+    height: scrollViewHeightXS,
+    child: SingleChildScrollView(
+      child: Column(children: [
+        if (players.isNotEmpty) ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: players.length,
+          itemBuilder: (context, position){
+            final player = players[position];
+            var score = rounds.where((r) => r.playerId == player.id).fold<int>(0, (sum, element) => sum + element.score!.toInt());
+            return Column(children: [
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
+                Text(player.name, style: encodeStyle(fontSize: accentFontSize)),
+                SizedBox(
+                  height: chartBarHeight,
+                  width: formWidth70,
+                  child: DChartSingleBar(
+                    forgroundColor: gameColors[position],
+                    forgroundLabel: Text(score.toString(), style: encodeStyle(color: ColorsPalette.white, weight: FontWeight.bold)),
+                    forgroundLabelPadding: const EdgeInsets.only(right: 10.0),
+                    backgroundLabel: Text(game.scoreToWin!.toString(), style: encodeStyle(color: ColorsPalette.black, weight: FontWeight.bold)),
+                    backgroundLabelPadding: const EdgeInsets.only(right: 10.0),
+                    value: score.toDouble(),
+                    max: game.scoreToWin!.toDouble(),
+                  ),
+              )
+              ]),
+              SizedBox(height: sizerHeight),
+            ],) ;
+          }
+        )
+      ],)
+    )
+  );
+
+  Widget _roundsTable() => SizedBox(
+    height: scrollViewHeightMd,
+    child: SingleChildScrollView(
+      child: Column(children: [
+        if (rounds.isNotEmpty) ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: rounds.length,
+          itemBuilder: (context, position){
+            final round = rounds[position];
+            return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
+              Text(round.roundNumber.toString(), style: encodeStyle(fontSize: accentFontSize)),
+              Text(players.firstWhere((p) => p.id == round.playerId).name, style: encodeStyle(fontSize: accentFontSize)),
+              Text(round.score.toString(), style: encodeStyle(fontSize: accentFontSize)),
+            ],) ;
+          }
+        )
+      ],)
+    )
+  );
 
 }

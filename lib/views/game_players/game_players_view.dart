@@ -58,78 +58,105 @@ class _GamePlayersViewState extends State<GamePlayersView>{
           },
         ),
       ),
-      body: BlocBuilder<GamePlayersCubit, GamePlayersState>(
-        builder: (context, state){
-          if(state.status == GamePlayersStatus.initial || state.status == GamePlayersStatus.loading){
-            return loadingWidget(ColorsPalette.maxBlueGreen);
-          }else{
-
-            players = state.players ?? List.empty(growable: true);
-
-            //_winScoreController!.text == '' ? _winScoreController!.text = state.winPoints.toString();
-
-            return Container(
-              padding: const EdgeInsets.all(15.0),              
-              child: Column(children: [          
-                Row(children: [
-                  Text("Score to win:", style: encodeStyle(fontSize: accentFontSize)),
-                  SizedBox(width: sizerWidthsm),
-                  SizedBox(width: formWidth40,
-                    child: TextFormField(     
-                      keyboardType: TextInputType.number,  
-                      textAlign: TextAlign.center,         
-                      style:  encodeStyle(fontSize: accentFontSize),
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,                  
-                        isDense: true,
-                        contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      body: BlocListener<GamePlayersCubit, GamePlayersState>(
+        listener: (context, state) {
+          if(state.status == GamePlayersStatus.failure && state.exception != null){
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  content: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: 250,
+                        child: Text(
+                          state.exception.toString(), style: encodeStyle(color: ColorsPalette.white),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 5,
+                        ),
                       ),
-                      controller: _winScoreController
-                    ),
+                      const Icon(Icons.error, color: ColorsPalette.white,)],
                   ),
-                ],),
-                const SizedBox(height: 25.0),
-                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    _startGameButton(context, players),
-                ]),
-                const SizedBox(height: 25.0),
-                if (players.isNotEmpty) Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                  Text("Players:", style: encodeStyle(fontSize: accentFontSize, weight: FontWeight.bold)),
-                ]),
-                const Divider(color: ColorsPalette.blueGrey,),
-                SizedBox(
-                  height: scrollViewHeightMd,
-                  child: SingleChildScrollView(
-                    child: Column(children: [
-                      if (players.isNotEmpty) ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: players.length,
-                        itemBuilder: (context, position){
-                          final player = players[position];
-                          return InkWell(
-                            child:  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                              Column(children: [
-                                Text(player.name, style: encodeStyle(fontSize: accentFontSize)),
-                              ],),
-                              Column(children: [
-                                _switchPlayer(context, player)
-                              ],)
-                            ]),
-                            onTap: (){
-                              context.read<GamePlayersCubit>().switchPlayer(player);
-                            },
-                          );
-                        }
-                      )
-                    ],)
-                  )
-                ),                
-              ]),
-            );
+                // duration: const Duration(seconds: 5),
+                  backgroundColor: ColorsPalette.desire,
+                ),
+              );
           }
-        }
-      ),
+        },
+        child: BlocBuilder<GamePlayersCubit, GamePlayersState>(
+          builder: (context, state){
+            if(state.status == GamePlayersStatus.initial || state.status == GamePlayersStatus.loading){
+              return loadingWidget(ColorsPalette.maxBlueGreen);
+            }else{
+
+              players = state.players ?? List.empty(growable: true);
+
+              //_winScoreController!.text == '' ? _winScoreController!.text = state.winPoints.toString();
+
+              return Container(
+                padding: const EdgeInsets.all(15.0),              
+                child: Column(children: [          
+                  Row(children: [
+                    Text("Score to win:", style: encodeStyle(fontSize: accentFontSize)),
+                    SizedBox(width: sizerWidthsm),
+                    SizedBox(width: formWidth40,
+                      child: TextFormField(     
+                        keyboardType: TextInputType.number,  
+                        textAlign: TextAlign.center,         
+                        style:  encodeStyle(fontSize: accentFontSize),
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,                  
+                          isDense: true,
+                          contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                        ),
+                        controller: _winScoreController
+                      ),
+                    ),
+                  ],),
+                  const SizedBox(height: 25.0),
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                      _startGameButton(context, players),
+                  ]),
+                  const SizedBox(height: 25.0),
+                  if (players.isNotEmpty) Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                    Text("Players:", style: encodeStyle(fontSize: accentFontSize, weight: FontWeight.bold)),
+                  ]),
+                  const Divider(color: ColorsPalette.blueGrey,),
+                  SizedBox(
+                    height: scrollViewHeightMd,
+                    child: SingleChildScrollView(
+                      child: Column(children: [
+                        if (players.isNotEmpty) ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: players.length,
+                          itemBuilder: (context, position){
+                            final player = players[position];
+                            return InkWell(
+                              child:  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                                Column(children: [
+                                  Text(player.name, style: encodeStyle(fontSize: accentFontSize)),
+                                ],),
+                                Column(children: [
+                                  _switchPlayer(context, player)
+                                ],)
+                              ]),
+                              onTap: (){
+                                context.read<GamePlayersCubit>().switchPlayer(player);
+                              },
+                            );
+                          }
+                        )
+                      ],)
+                    )
+                  ),                
+                ]),
+              );
+            }
+          }
+        ),
+        ),
       floatingActionButton:  FloatingActionButton.extended(
         onPressed: (){
           showDialog(barrierDismissible: false, context: context,builder: (_) =>
@@ -155,14 +182,14 @@ class _GamePlayersViewState extends State<GamePlayersView>{
     ),
     onPressed: () {
 
-      var scoreToWin = int.parse(_winScoreController?.text ?? "");
+      var scoreToWin = int.tryParse(_winScoreController?.text ?? '0') ?? 0;
 
       if(scoreToWin < 0){
         
       }else{
         var game = Game(scoreToWin: scoreToWin);
         context.read<GamePlayersCubit>().addNewGame(game, players).then((gameId){
-          Navigator.pushNamed(context, currentGameRoute, arguments: gameId).then((value) {});
+          if(gameId != null) Navigator.pushNamed(context, currentGameRoute, arguments: gameId).then((value) {});
         });        
       }      
     },
