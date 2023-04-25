@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.uno_assistant">
    <application
-        android:label="uno_assistant"
+        android:label="Uno Assistant"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
